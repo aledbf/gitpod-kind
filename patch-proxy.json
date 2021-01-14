@@ -1,0 +1,40 @@
+{
+	"spec": {
+		"strategy": {
+			"rollingUpdate": {
+				"maxSurge": 1,
+				"maxUnavailable": 1
+			},
+			"type": "RollingUpdate"
+		},
+		"template": {
+			"spec": {
+				"dnsPolicy": "ClusterFirst",
+				"nodeSelector": {
+					"proxy-ready": "true"
+				},
+				"tolerations": [{
+					"effect": "NoSchedule",
+					"key": "node-role.kubernetes.io/master",
+					"operator": "Equal"
+				}],
+				"containers": [{
+					"name": "proxy",
+					"ports": [{
+							"containerPort": 80,
+							"hostPort": 80,
+							"name": "http",
+							"protocol": "TCP"
+						},
+						{
+							"containerPort": 443,
+							"hostPort": 443,
+							"name": "https",
+							"protocol": "TCP"
+						}
+					]
+				}]
+			}
+		}
+	}
+}
